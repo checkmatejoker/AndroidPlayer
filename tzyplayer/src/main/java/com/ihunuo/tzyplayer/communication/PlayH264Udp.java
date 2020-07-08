@@ -11,12 +11,12 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.coremedia.iso.boxes.Container;
-import com.googlecode.mp4parser.FileDataSourceImpl;
-import com.googlecode.mp4parser.authoring.Movie;
-import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
-import com.googlecode.mp4parser.authoring.tracks.AACTrackImpl;
-import com.googlecode.mp4parser.authoring.tracks.h264.H264TrackImpl;
+//import com.coremedia.iso.boxes.Container;
+//import com.googlecode.mp4parser.FileDataSourceImpl;
+//import com.googlecode.mp4parser.authoring.Movie;
+//import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
+//import com.googlecode.mp4parser.authoring.tracks.AACTrackImpl;
+//import com.googlecode.mp4parser.authoring.tracks.h264.H264TrackImpl;
 import com.ihunuo.tzyplayer.R;
 import com.ihunuo.tzyplayer.audio.AudioDecoder;
 import com.ihunuo.tzyplayer.audio.AudioTrackPlay;
@@ -511,40 +511,40 @@ public class PlayH264Udp {
      * @param acc_path      读取acc路径 如果没有ACC 传“”
      * @param flag          是否有音频
      */
-    public void H264toMP4(String save_mp4_path, String h264_path, String acc_path, boolean flag) {
-        FileOutputStream fos = null;
-        AACTrackImpl aacTrack = null;
-        Movie m;
-        Log.d("ccc", "H264toMP4: h264_path=" + h264_path + " acc_path=" + acc_path);
-        try {
-            //这里传入的file是指H264格式对应的文件
-            H264TrackImpl h264Track = new H264TrackImpl(new FileDataSourceImpl(h264_path));
-            if (flag) {
-                aacTrack = new AACTrackImpl(new FileDataSourceImpl(acc_path));
-                m = new Movie();
-                m.addTrack(h264Track);
-                m.addTrack(aacTrack);
-            } else {
-                m = new Movie();
-                m.addTrack(h264Track);
-            }
-
-            Container out = new DefaultMp4Builder().build(m);
-            //这里传入的就是要保存的mp4文件目录
-            fos = new FileOutputStream(save_mp4_path);
-            FileChannel fc = fos.getChannel();
-            out.writeContainer(fc);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != fos)
-                    fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    public void H264toMP4(String save_mp4_path, String h264_path, String acc_path, boolean flag) {
+//        FileOutputStream fos = null;
+//        AACTrackImpl aacTrack = null;
+//        Movie m;
+//        Log.d("ccc", "H264toMP4: h264_path=" + h264_path + " acc_path=" + acc_path);
+//        try {
+//            //这里传入的file是指H264格式对应的文件
+//            H264TrackImpl h264Track = new H264TrackImpl(new FileDataSourceImpl(h264_path));
+//            if (flag) {
+//                aacTrack = new AACTrackImpl(new FileDataSourceImpl(acc_path));
+//                m = new Movie();
+//                m.addTrack(h264Track);
+//                m.addTrack(aacTrack);
+//            } else {
+//                m = new Movie();
+//                m.addTrack(h264Track);
+//            }
+//
+//            Container out = new DefaultMp4Builder().build(m);
+//            //这里传入的就是要保存的mp4文件目录
+//            fos = new FileOutputStream(save_mp4_path);
+//            FileChannel fc = fos.getChannel();
+//            out.writeContainer(fc);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (null != fos)
+//                    fos.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     //新版录像
 
