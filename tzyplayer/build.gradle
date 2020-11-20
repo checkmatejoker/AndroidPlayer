@@ -37,13 +37,15 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.googlecode.mp4parser:isoparser:1.1.21'//h264合成MP4
     implementation 'jp.co.cyberagent.android:gpuimage:2.0.4'
+
+
 }
 
 publish {
     userOrg = 'checkmatejoker'
     groupId = 'com.tzyandroid'
     artifactId = 'player'
-    publishVersion = '1.0.5'
+    publishVersion = '1.0.6'
     desc = 'this is andrroid h264player'
-    website = 'https://github.com/checkmatejoker/MyBleDemo'
+    website = 'https://github.com/checkmatejoker/AndroidPlayer'
 }

@@ -49,13 +49,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         verifyStoragePermissions(this);
-
         PICTRUEPATH = Environment.getExternalStorageDirectory() + "/MyPlayer";
         File f = new File(PICTRUEPATH);
         if (!f.exists()) {
             f.mkdirs();
         }
-
         yuvSurfaceView = findViewById(R.id.yuvsurfaceview);
         mphot= findViewById(R.id.photho);
         mrecoder= findViewById(R.id.luxiang);
