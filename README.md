@@ -40,7 +40,7 @@ DeviceH264Manager 是处理解析h264的流的以及对外暴露接口的主要�
 3.与YUVSurfaceView关联并开始监听UDP端口进行数据解析
   deviceH264Manager.start(yuvSurfaceView, new Decodelister()  
 ```
-### 步骤三 设置监听数据类已经相关逻辑处
+### 步骤三 设置监听数据类已经相关逻辑处理
 Decodelister 是解析h264的回调处理类其暴露的接口为
 ```
   1.public void firstDecode() //第一次解析到完整H264帧会发生回调
@@ -55,10 +55,12 @@ Decodelister 是解析h264的回调处理类其暴露的接口为
  ### 步骤四 拍照
  ```
   deviceH264Manager.takePhoto();
+
   Toast.makeText(MainActivity.this,"拍照成功",Toast.LENGTH_LONG);
+
   UIUtils.shootSound(MainActivity.this);
  ```
- ### 步骤四 录像
+ ### 步骤五 录像
  ```
   isrecode =!isrecode;
    if (isrecode)
