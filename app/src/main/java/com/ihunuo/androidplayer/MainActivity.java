@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.ihunuo.tzyplayer.DeviceH264Manager;
 import com.ihunuo.tzyplayer.lisrener.Decodelister;
+import com.ihunuo.tzyplayer.surfaceviews.NormalSurfaceView;
 import com.ihunuo.tzyplayer.surfaceviews.YUVSurfaceView;
 import com.ihunuo.tzyplayer.units.UIUtils;
 
@@ -34,6 +35,8 @@ import static com.ihunuo.tzyplayer.units.UIUtils.scanIntoMediaStore;
 public class MainActivity extends AppCompatActivity {
 
     YUVSurfaceView yuvSurfaceView ;
+
+    NormalSurfaceView normalSurfaceView;
     Button mphot;
     Button mrecoder;
     TextView recodetext;
@@ -55,10 +58,12 @@ public class MainActivity extends AppCompatActivity {
             f.mkdirs();
         }
         yuvSurfaceView = findViewById(R.id.yuvsurfaceview);
+        normalSurfaceView = findViewById(R.id.normolsurfaceview);
         mphot= findViewById(R.id.photho);
         mrecoder= findViewById(R.id.luxiang);
         recodetext = findViewById(R.id.textrecodtime);
         deviceH264Manager = new DeviceH264Manager(this);
+        deviceH264Manager.setBufferNum(0);
         deviceH264Manager.setVideoPath(PICTRUEPATH);
         recodetext.setVisibility(View.GONE);
         mphot.setOnClickListener(new View.OnClickListener() {
@@ -92,8 +97,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        deviceH264Manager.start(yuvSurfaceView, new Decodelister() {
+       //使用yuv方式渲染h264
+//        deviceH264Manager.start(yuvSurfaceView, new Decodelister() {
+//            @Override
+//            public void firstDecode() {
+//
+//            }
+//
+//            @Override
+//            public void decodeYUV(byte[] yuv, int width, int hieght) {
+//                yuvSurfaceView.setYUVData(yuv, width, hieght);
+//            }
+//
+//            @Override
+//            public void takePhoto(Bitmap bmp) {
+//                if ( bmp != null) {
+//                    String ss1 = MainActivity.PICTRUEPATH+"/"+System.currentTimeMillis()+".jpeg";
+//                    String ss2 =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()+"/Camera/"+System.currentTimeMillis()+".jpeg";
+//                    File  file = new File(ss1);
+//                    if(file.exists()){
+//                        file.delete();
+//                    }
+//                    FileOutputStream out;
+//                    try{
+//                        out = new FileOutputStream(file);
+//                        // 格式为 JPEG，照相机拍出的图片为JPEG格式的，PNG格式的不能显示在相册中
+//                        if(bmp.compress(Bitmap.CompressFormat.JPEG, 90, out))
+//                        {
+//                            out.flush();
+//                            out.close();
+//                        }
+//                    }
+//                    catch (FileNotFoundException e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//                    catch (IOException e)
+//                    {
+//                        e.printStackTrace();
+//
+//                    }
+//                    copyFile(ss1,ss2,MainActivity.this);
+//
+//                }
+//            }
+//
+//            @Override
+//            public void redata(byte[] data, int len) {
+//
+//            }
+//        });
+        //直接渲染h264视频
+        deviceH264Manager.start(normalSurfaceView, new Decodelister() {
             @Override
             public void firstDecode() {
 
@@ -101,40 +156,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void decodeYUV(byte[] yuv, int width, int hieght) {
-                yuvSurfaceView.setYUVData(yuv, width, hieght);
+
             }
 
             @Override
             public void takePhoto(Bitmap bmp) {
-                if ( bmp != null) {
-                    String ss1 = MainActivity.PICTRUEPATH+"/"+System.currentTimeMillis()+".jpeg";
-                    String ss2 =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()+"/Camera/"+System.currentTimeMillis()+".jpeg";
-                    File  file = new File(ss1);
-                    if(file.exists()){
-                        file.delete();
-                    }
-                    FileOutputStream out;
-                    try{
-                        out = new FileOutputStream(file);
-                        // 格式为 JPEG，照相机拍出的图片为JPEG格式的，PNG格式的不能显示在相册中
-                        if(bmp.compress(Bitmap.CompressFormat.JPEG, 90, out))
-                        {
-                            out.flush();
-                            out.close();
-                        }
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
 
-                    }
-                    copyFile(ss1,ss2,MainActivity.this);
-
-                }
             }
 
             @Override

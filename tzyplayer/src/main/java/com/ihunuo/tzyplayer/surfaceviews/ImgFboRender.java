@@ -63,8 +63,8 @@ public class ImgFboRender {
 
     public void onCreate()
     {
-        String vertexSource = ShaderUtil.getRawResource(context, R.raw.vertex_shader_opengl2);
-        String fragmentSource = ShaderUtil.getRawResource(context, R.raw.fragment_shader_screen);
+        String vertexSource = ShaderUtil.getRawResource(context, R.raw.vertex_shader_jpg);
+        String fragmentSource = ShaderUtil.getRawResource(context, R.raw.fragment_shader_screen_jpg);
 
         program = ShaderUtil.createProgram(vertexSource, fragmentSource);
 

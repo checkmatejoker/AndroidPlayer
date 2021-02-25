@@ -21,9 +21,11 @@ import com.ihunuo.tzyplayer.R;
 import com.ihunuo.tzyplayer.audio.AudioDecoder;
 import com.ihunuo.tzyplayer.audio.AudioTrackPlay;
 import com.ihunuo.tzyplayer.decode.MediaCodePlayYuv;
+import com.ihunuo.tzyplayer.decode.MediaCodeSurface;
 import com.ihunuo.tzyplayer.decode.MediaCodecEncoderAudio;
 import com.ihunuo.tzyplayer.encode.UserMediaEncodec;
 import com.ihunuo.tzyplayer.lisrener.Decodelister;
+import com.ihunuo.tzyplayer.surfaceviews.NormalSurfaceView;
 import com.ihunuo.tzyplayer.surfaceviews.YUVSurfaceView;
 import com.ihunuo.tzyplayer.units.UIUtils;
 
@@ -79,10 +81,13 @@ public class PlayH264Udp {
     private AudioDecoder audioDecoder;
     private SendUDPThread sendUDPThread;
     public YUVSurfaceView myGLSurfaceView;
-
+    public NormalSurfaceView normalSurfaceView;
 
 
     public MediaCodePlayYuv mediaCodePlayOpenGL;
+
+    boolean isYUV = false;
+
 
     public static PlayH264Udp getInstance() {
         if (playH264Udp == null) {
@@ -96,6 +101,16 @@ public class PlayH264Udp {
         this.myGLSurfaceView = src;
         mediaCodePlayOpenGL = new MediaCodePlayYuv(mydecodelister);
         mediaCodePlayOpenGL.initDecoder();
+        isYUV = true;
+        initUDP();
+    }
+
+
+    public void initUDP(Context context, Decodelister mydecodelister , NormalSurfaceView src) {
+        this.context = context;
+        this.normalSurfaceView = src;
+        this.normalSurfaceView.setDecodelister(mydecodelister);
+        isYUV = false;
         initUDP();
     }
 
@@ -211,10 +226,22 @@ public class PlayH264Udp {
 
     public void video_decode(byte data[], int length) {//解码
         int offset = 0;
-//        Log.d("ccc", "video_decode: " + length);
+        Log.d("ccc", "video_decode: " + length);
         if ((data[4] & 0x1f) == 7 && !is_sps_pps_ready) {
 
-            mediaCodePlayOpenGL.onFrame(data, 0, length);
+            if (isYUV)
+            {
+                mediaCodePlayOpenGL.onFrame(data, 0, length);
+            }
+            else
+            {
+                if (normalSurfaceView.getMediaCodeSurface()!=null)
+                {
+                    normalSurfaceView.getMediaCodeSurface().onFrame(data, 0, length);
+                }
+
+            }
+
             is_sps_pps_ready = true;
 
 
@@ -228,11 +255,29 @@ public class PlayH264Udp {
                     offset = offset + 10;
                 }
             }
-            mediaCodePlayOpenGL.onFrame(data, offset, length - offset);
+            if (isYUV) {
+                mediaCodePlayOpenGL.onFrame(data, offset, length - offset);
+            }
+            else
+            {
+                if (normalSurfaceView.getMediaCodeSurface()!=null)
+                {
+                    normalSurfaceView.getMediaCodeSurface().onFrame(data, offset, length - offset);
+                }
+            }
 
             Log.d("ccc", "run: is_sps_pps_read:" + is_sps_pps_ready);
         } else if (is_sps_pps_ready) {
-            mediaCodePlayOpenGL.onFrame(data, 0, length);
+            if (isYUV) {
+                mediaCodePlayOpenGL.onFrame(data, 0, length);
+            }
+            else
+            {
+                if (normalSurfaceView.getMediaCodeSurface()!=null)
+                {
+                    normalSurfaceView.getMediaCodeSurface().onFrame(data, 0, length);
+                }
+            }
 
         }
 
@@ -400,9 +445,21 @@ public class PlayH264Udp {
 
 
     public void socket_photo() {//拍照
-        if (mediaCodePlayOpenGL != null && !mediaCodePlayOpenGL.photo_codec_flag) {
-            mediaCodePlayOpenGL.photo_codec_flag = true;
+
+        if (isYUV)
+        {
+            if (mediaCodePlayOpenGL != null && !mediaCodePlayOpenGL.photo_codec_flag) {
+                mediaCodePlayOpenGL.photo_codec_flag = true;
+            }
         }
+        else
+        {
+//            if (normalSurfaceView.getMediaCodeSurface() != null && !normalSurfaceView.getMediaCodeSurface().photo_codec_flag) {
+//                normalSurfaceView.getMediaCodeSurface().photo_codec_flag = true;
+//            }
+        }
+
+
     }
 
 
@@ -505,12 +562,6 @@ public class PlayH264Udp {
 
 
 
-    /**
-     * @param save_mp4_path 保存MP4路径
-     * @param h264_path     读取H264路径
-     * @param acc_path      读取acc路径 如果没有ACC 传“”
-     * @param flag          是否有音频
-     */
 //    public void H264toMP4(String save_mp4_path, String h264_path, String acc_path, boolean flag) {
 //        FileOutputStream fos = null;
 //        AACTrackImpl aacTrack = null;

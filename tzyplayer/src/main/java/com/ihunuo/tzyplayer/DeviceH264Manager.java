@@ -17,6 +17,7 @@ import com.ihunuo.tzyplayer.communication.PlayH264Udp;
 import com.ihunuo.tzyplayer.communication.TzyTcp;
 import com.ihunuo.tzyplayer.lisrener.Decodelister;
 import com.ihunuo.tzyplayer.lisrener.TcpLister;
+import com.ihunuo.tzyplayer.surfaceviews.NormalSurfaceView;
 import com.ihunuo.tzyplayer.surfaceviews.YUVSurfaceView;
 import com.ihunuo.tzyplayer.units.UIUtils;
 
@@ -39,7 +40,7 @@ public class DeviceH264Manager {
     int modeSize = 0;
     private boolean isTaking = false;
     private YUVSurfaceView yuvSurfaceView;
-
+    private NormalSurfaceView normalSurfaceView;
     public DeviceH264Manager(Activity activity) {
         this.activity = activity;
         playH264Udp = PlayH264Udp.getInstance();
@@ -49,6 +50,40 @@ public class DeviceH264Manager {
         this.decodelister = mydecodelister;
         this.yuvSurfaceView = myyuvSurfaceView;
         playH264Udp.initUDP(activity, decodelister,myyuvSurfaceView);//使用Surface + openglse2.0渲染
+//        hnSocketMjpegUDP.send_UDP_open_signalframe();//UDP开流，解决宾远协议历史遗留问题
+
+
+//        tzyTcp = new TzyTcp(new TcpLister() {
+//            @Override
+//            public void creatTcpSusscced() {
+//
+//            }
+//
+//            @Override
+//            public void reviceData(byte[] data) {
+//
+//            }
+//        });
+//        tzyTcp.start();
+//            sendTCPHeartbeat();//开始发送心跳
+
+        IntentFilter intentFilter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        intentFilter.addAction("com.ihunuo.record");
+        activity.registerReceiver(mReceiver, intentFilter);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                flagBroadcastReceiver = false;
+            }
+        }, 10000);
+
+
+    }
+
+    public void start(NormalSurfaceView mynormalSurfaceView, Decodelister mydecodelister) {
+        this.decodelister = mydecodelister;
+        this.normalSurfaceView = mynormalSurfaceView;
+        playH264Udp.initUDP(activity, decodelister,mynormalSurfaceView);//使用Surface + openglse2.0渲染
 //        hnSocketMjpegUDP.send_UDP_open_signalframe();//UDP开流，解决宾远协议历史遗留问题
 
 

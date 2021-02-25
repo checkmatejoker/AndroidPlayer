@@ -1,8 +1,7 @@
-attribute vec4 v_Position;
-attribute vec2 f_Position;
-varying vec2 ft_Position;
-uniform mat4 u_Matrix;
+attribute vec4 av_Position;
+attribute vec2 af_Position;
+varying vec2 v_texPosition;
 void main() {
-    ft_Position = f_Position;
-    gl_Position = v_Position * u_Matrix;
+    v_texPosition = af_Position;
+    gl_Position = av_Position;
 }

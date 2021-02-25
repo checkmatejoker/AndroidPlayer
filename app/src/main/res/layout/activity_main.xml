@@ -8,8 +8,14 @@
 
   <com.ihunuo.tzyplayer.surfaceviews.YUVSurfaceView
       android:id="@+id/yuvsurfaceview"
+      android:visibility="gone"
       android:layout_width="match_parent"
       android:layout_height="match_parent"></com.ihunuo.tzyplayer.surfaceviews.YUVSurfaceView>
+  <com.ihunuo.tzyplayer.surfaceviews.NormalSurfaceView
+      android:id="@+id/normolsurfaceview"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"></com.ihunuo.tzyplayer.surfaceviews.NormalSurfaceView>
+
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">
