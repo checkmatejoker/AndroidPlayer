@@ -605,7 +605,7 @@ public class PlayH264Udp {
             if (is_video_flag) {
 
                 String name = System.currentTimeMillis()+ ".mp4";
-                userMediaEncodec = new UserMediaEncodec(context, myGLSurfaceView.getFbotextureid());
+                userMediaEncodec = new UserMediaEncodec(context, normalSurfaceView.getFbotextureid());
                 userMediaEncodec.initEncodec(myGLSurfaceView.getEglContext(), getSavePath() + "/" + name,
                         recodewith, recodeheght, 16000, 2, isVoice);
                 userMediaEncodec.setOnMediaInfoListener(new UserMediaEncodec.OnMediaInfoListener() {
